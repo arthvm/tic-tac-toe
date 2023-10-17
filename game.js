@@ -12,10 +12,19 @@ const gameController = (function () {
         );
       });
     });
-
-    //Get current Player, alternating between both
-    const getCurrentPlayer = () => console.log("TODO: getCurrentPlayer");
   })();
+
+  let _players = new Array();
+
+  const _setPlayer = (playerName, playerMarker) =>
+    _players.push(createPlayer(playerName, playerMarker));
+
+  //Get current Player, alternating between both
+  const getCurrentPlayer = () => {
+    return _players[gameBoard.getEmptyTiles().length % 2 != 0 ? 0 : 1];
+  };
+
+  return { getCurrentPlayer };
 })();
 
 // Stores the logic that manages the board
