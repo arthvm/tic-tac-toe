@@ -15,7 +15,9 @@ const gameBoard = (function () {
     return _emptyTiles;
   };
 
-  return { getEmptyTiles };
+  const addMarkerToBoard = (marker, tile) => (_board[tile] = marker);
+
+  return { getEmptyTiles, addMarkerToBoard };
 })();
 
 //Stores the logic that renders the game
