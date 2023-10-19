@@ -10,6 +10,9 @@ const gameController = (function () {
           getCurrentPlayer().marker,
           +tile.dataset.index
         );
+
+        displayController.updateBoardRender();
+        _checkForWin(); //TODO
       });
     });
   })();
@@ -19,10 +22,15 @@ const gameController = (function () {
   const _setPlayer = (playerName, playerMarker) =>
     _players.push(createPlayer(playerName, playerMarker));
 
+  const player1 = _setPlayer("Player 1", "X"); //REMOVE AFTER TESTING
+  const player2 = _setPlayer("Player 2", "0"); //REMOVE AFTER TESTING
+
   //Get current Player, alternating between both
   const getCurrentPlayer = () => {
     return _players[gameBoard.getEmptyTiles().length % 2 != 0 ? 0 : 1];
   };
+
+  const _checkForWin = () => {}; //TODO
 
   return { getCurrentPlayer };
 })();
@@ -30,6 +38,10 @@ const gameController = (function () {
 // Stores the logic that manages the board
 const gameBoard = (function () {
   let _board = new Array(9);
+
+  const getBoard = () => _board;
+
+  const getTile = (tile) => _board[tile];
 
   const getEmptyTiles = () => {
     let _emptyTiles = new Array();
@@ -47,11 +59,21 @@ const gameBoard = (function () {
     }
   };
 
-  return { getEmptyTiles, addMarkerToBoard };
+  return { getBoard, getTile, getEmptyTiles, addMarkerToBoard };
 })();
 
 //Stores the logic that renders the game
-const displayController = (function () {})();
+const displayController = (function () {
+  const _tiles = document.querySelectorAll(".tile");
+  // Render marker on HTML;
+  const updateBoardRender = () => {
+    _tiles.forEach((tile) => {
+      tile.textContent = gameBoard.getBoard()[+tile.dataset.index];
+    });
+  };
+
+  return { updateBoardRender };
+})();
 
 //Player Factory
 function createPlayer(name, marker) {
