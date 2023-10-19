@@ -11,17 +11,23 @@ const gameController = (function () {
       if (_gameBtn.dataset.mode == "start") {
         _startGame();
       } else {
-        _restartGame(); //TODO
+        _restartGame();
       }
     });
   })();
 
   const _startGame = function () {
     _addTileListener();
+    const player1 = _setPlayer("Player 1", "X"); //REMOVE AFTER TESTING
+    const player2 = _setPlayer("Player 2", "0"); //REMOVE AFTER TESTING
     gameController.getGameBtn().dataset.mode = "restart";
   };
 
-  const _restartGame = function () {}; //TODO
+  const _restartGame = function () {
+    gameBoard.clearBoard();
+    displayController.clearBoard();
+    gameController.getGameBtn().dataset.mode = "start";
+  };
 
   const _addTileListener = () => {
     const _tiles = document.querySelectorAll(".tile");
@@ -43,9 +49,6 @@ const gameController = (function () {
 
   const _setPlayer = (playerName, playerMarker) =>
     _players.push(createPlayer(playerName, playerMarker));
-
-  const player1 = _setPlayer("Player 1", "X"); //REMOVE AFTER TESTING
-  const player2 = _setPlayer("Player 2", "0"); //REMOVE AFTER TESTING
 
   //Get current Player, alternating between both
   const getCurrentPlayer = () => {
@@ -142,7 +145,11 @@ const gameBoard = (function () {
     }
   };
 
-  return { getBoard, getTile, getEmptyTiles, addMarkerToBoard };
+  const clearBoard = () => {
+    _board = new Array(9);
+  };
+
+  return { getBoard, getTile, getEmptyTiles, addMarkerToBoard, clearBoard };
 })();
 
 //Stores the logic that renders the game
@@ -166,7 +173,13 @@ const displayController = (function () {
     }
   };
 
-  return { changeBtn, updateBoardRender };
+  const clearBoard = () => {
+    _tiles.forEach((tile) => {
+      tile.textContent = "";
+    });
+  };
+
+  return { changeBtn, updateBoardRender, clearBoard };
 })();
 
 //Player Factory
