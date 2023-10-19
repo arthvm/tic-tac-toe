@@ -63,9 +63,30 @@ const gameController = (function () {
       }
     };
 
-    const _checkForDiagonal = () => {}; // TODO
+    const _checkForDiagonal = () => {
+      const diagonalRight = [
+        gameBoard.getTile(0),
+        gameBoard.getTile(4),
+        gameBoard.getTile(8),
+      ];
 
-    if (_checkForRow() || _checkForCollum()) {
+      const diagonalLeft = [
+        gameBoard.getTile(2),
+        gameBoard.getTile(4),
+        gameBoard.getTile(6),
+      ];
+
+      if (
+        diagonalRight.every((tile) => tile == "X") ||
+        diagonalRight.every((tile) => tile == "0") ||
+        diagonalLeft.every((tile) => tile == "X") ||
+        diagonalLeft.every((tile) => tile == "0")
+      ) {
+        return true;
+      }
+    };
+
+    if (_checkForRow() || _checkForCollum() || _checkForDiagonal()) {
       console.log("Win"); // REMOVE AFTER TESTING
     }
   }; //TODO
