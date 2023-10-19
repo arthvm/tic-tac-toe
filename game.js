@@ -20,11 +20,20 @@ const gameController = (function () {
     _addTileListener();
     const player1 = _setPlayer("Player 1", "X"); //REMOVE AFTER TESTING
     const player2 = _setPlayer("Player 2", "0"); //REMOVE AFTER TESTING
+    _disablePlayerInput();
     gameController.getGameBtn().dataset.mode = "restart";
   };
 
   const _restartGame = function () {
     location.reload();
+  };
+
+  const _disablePlayerInput = () => {
+    const _playerInputs = document.querySelectorAll(".player-input");
+
+    _playerInputs.forEach((inputs) => {
+      inputs.disabled = true;
+    });
   };
 
   const _addTileListener = () => {
