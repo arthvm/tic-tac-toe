@@ -12,7 +12,7 @@ const gameController = (function () {
         );
 
         displayController.updateBoardRender();
-        _checkForWin(); //TODO
+        _checkResult();
       });
     });
   })();
@@ -30,7 +30,7 @@ const gameController = (function () {
     return _players[gameBoard.getEmptyTiles().length % 2 != 0 ? 0 : 1];
   };
 
-  const _checkForWin = () => {
+  const _checkResult = () => {
     const _checkForRow = () => {
       for (let i = 0; i <= 6; i += 3) {
         let currentRow = [];
@@ -88,8 +88,10 @@ const gameController = (function () {
 
     if (_checkForRow() || _checkForCollum() || _checkForDiagonal()) {
       console.log("Win"); // REMOVE AFTER TESTING
+    } else if (gameBoard.getEmptyTiles().length == 0) {
+      console.log("Tie!");
     }
-  }; //TODO
+  };
 
   return { getCurrentPlayer };
 })();
