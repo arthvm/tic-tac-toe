@@ -30,7 +30,33 @@ const gameController = (function () {
     return _players[gameBoard.getEmptyTiles().length % 2 != 0 ? 0 : 1];
   };
 
-  const _checkForWin = () => {}; //TODO
+  const _checkForWin = () => {
+    const _checkForRow = () => {
+      for (let i = 0; i <= 6; i += 3) {
+        let currentRow = [];
+        for (let j = i; j <= i + 2; j++) {
+          currentRow[j] = gameBoard.getTile(j);
+        }
+
+        if (
+          currentRow.every((tile) => tile == "X") ||
+          currentRow.every((tile) => tile == "0")
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    };
+
+    const _checkForCollum = () => {}; // TODO
+
+    const _checkForDiagonal = () => {}; // TODO
+
+    if (_checkForRow()) {
+      console.log("Win"); // REMOVE AFTER TESTING
+    }
+  }; //TODO
 
   return { getCurrentPlayer };
 })();
@@ -65,7 +91,7 @@ const gameBoard = (function () {
 //Stores the logic that renders the game
 const displayController = (function () {
   const _tiles = document.querySelectorAll(".tile");
-  // Render marker on HTML;
+  // Render marker on HTML
   const updateBoardRender = () => {
     _tiles.forEach((tile) => {
       tile.textContent = gameBoard.getBoard()[+tile.dataset.index];
