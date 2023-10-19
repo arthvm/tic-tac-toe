@@ -18,8 +18,7 @@ const gameController = (function () {
 
   const _startGame = function () {
     _addTileListener();
-    const player1 = _setPlayer("Player 1", "X"); //REMOVE AFTER TESTING
-    const player2 = _setPlayer("Player 2", "0"); //REMOVE AFTER TESTING
+    _getPlayers();
     _disablePlayerInput();
     gameController.getGameBtn().dataset.mode = "restart";
   };
@@ -60,6 +59,18 @@ const gameController = (function () {
 
   const _setPlayer = (playerName, playerMarker) =>
     _players.push(createPlayer(playerName, playerMarker));
+
+  const _getPlayers = () => {
+    const _playerInputs = document.querySelectorAll(".player-input");
+
+    _playerInputs.forEach((input) => {
+      if (input.value == "") {
+        console.log("AI"); //TODO:  ADD AI
+      } else {
+        _setPlayer(input.value, input.dataset.marker);
+      }
+    });
+  };
 
   //Get current Player, alternating between both
   const getCurrentPlayer = () => {
