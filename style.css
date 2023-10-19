@@ -14,14 +14,40 @@ body {
 .container {
   height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.game-btn {
+  margin-top: 200px;
+  height: 40px;
+  width: 100px;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #121212;
+  font-weight: 800;
+}
+
+.game-btn[data-mode="start"] {
+  background-color: whitesmoke;
+  border: 1px solid white;
+}
+
+.game-btn[data-mode="restart"] {
+  background-color: rgb(219, 219, 0);
+  border: 1px solid rgb(155, 155, 0);
 }
 
 .board {
   display: grid;
   grid-template-columns: repeat(3, 100px);
   grid-template-rows: repeat(3, 100px);
+  opacity: 50%;
+}
+
+.board.active {
+  opacity: 100%;
 }
 
 .tile {

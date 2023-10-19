@@ -1,7 +1,29 @@
 // Stores the logic related to the game itself
 const gameController = (function () {
-  //Add Event Listener to the tiles
-  const _tileListener = (function () {
+  const _gameBtn = document.querySelector(".game-btn");
+
+  const getGameBtn = () => _gameBtn;
+
+  const _addGameBtnListener = (function () {
+    _gameBtn.addEventListener("click", () => {
+      displayController.changeBtn(_gameBtn.dataset.mode);
+
+      if (_gameBtn.dataset.mode == "start") {
+        _startGame();
+      } else {
+        _restartGame(); //TODO
+      }
+    });
+  })();
+
+  const _startGame = function () {
+    _addTileListener();
+    gameController.getGameBtn().dataset.mode = "restart";
+  };
+
+  const _restartGame = function () {}; //TODO
+
+  const _addTileListener = () => {
     const _tiles = document.querySelectorAll(".tile");
 
     _tiles.forEach((tile) => {
@@ -15,7 +37,7 @@ const gameController = (function () {
         _checkResult();
       });
     });
-  })();
+  };
 
   let _players = new Array();
 
@@ -93,7 +115,7 @@ const gameController = (function () {
     }
   };
 
-  return { getCurrentPlayer };
+  return { getGameBtn, getCurrentPlayer };
 })();
 
 // Stores the logic that manages the board
@@ -125,6 +147,7 @@ const gameBoard = (function () {
 
 //Stores the logic that renders the game
 const displayController = (function () {
+  const _board = document.querySelector(".board");
   const _tiles = document.querySelectorAll(".tile");
   // Render marker on HTML
   const updateBoardRender = () => {
@@ -133,7 +156,17 @@ const displayController = (function () {
     });
   };
 
-  return { updateBoardRender };
+  const changeBtn = (mode) => {
+    if (mode == "start") {
+      _board.classList.add("active");
+      gameController.getGameBtn().value = "Restart";
+    } else {
+      _board.classList.remove("active");
+      gameController.getGameBtn().value = "Start Game";
+    }
+  };
+
+  return { changeBtn, updateBoardRender };
 })();
 
 //Player Factory
