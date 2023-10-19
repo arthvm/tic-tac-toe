@@ -43,17 +43,29 @@ const gameController = (function () {
           currentRow.every((tile) => tile == "0")
         ) {
           return true;
-        } else {
-          return false;
         }
       }
     };
 
-    const _checkForCollum = () => {}; // TODO
+    const _checkForCollum = () => {
+      for (let i = 0; i < 3; i++) {
+        let currentCol = [];
+        for (let j = i; j <= i + 6; j += 3) {
+          currentCol[j] = gameBoard.getTile(j);
+        }
+
+        if (
+          currentCol.every((tile) => tile == "X") ||
+          currentCol.every((tile) => tile == "0")
+        ) {
+          return true;
+        }
+      }
+    };
 
     const _checkForDiagonal = () => {}; // TODO
 
-    if (_checkForRow()) {
+    if (_checkForRow() || _checkForCollum()) {
       console.log("Win"); // REMOVE AFTER TESTING
     }
   }; //TODO
