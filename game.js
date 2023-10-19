@@ -24,24 +24,26 @@ const gameController = (function () {
   };
 
   const _restartGame = function () {
-    gameBoard.clearBoard();
-    displayController.clearBoard();
-    gameController.getGameBtn().dataset.mode = "start";
+    location.reload();
   };
 
   const _addTileListener = () => {
     const _tiles = document.querySelectorAll(".tile");
 
     _tiles.forEach((tile) => {
-      tile.addEventListener("click", () => {
-        gameBoard.addMarkerToBoard(
-          getCurrentPlayer().marker,
-          +tile.dataset.index
-        );
+      tile.addEventListener(
+        "click",
+        () => {
+          gameBoard.addMarkerToBoard(
+            getCurrentPlayer().marker,
+            +tile.dataset.index
+          );
 
-        displayController.updateBoardRender();
-        _checkResult();
-      });
+          displayController.updateBoardRender();
+          _checkResult();
+        },
+        { once: true }
+      );
     });
   };
 
@@ -145,11 +147,7 @@ const gameBoard = (function () {
     }
   };
 
-  const clearBoard = () => {
-    _board = new Array(9);
-  };
-
-  return { getBoard, getTile, getEmptyTiles, addMarkerToBoard, clearBoard };
+  return { getBoard, getTile, getEmptyTiles, addMarkerToBoard };
 })();
 
 //Stores the logic that renders the game
@@ -173,13 +171,7 @@ const displayController = (function () {
     }
   };
 
-  const clearBoard = () => {
-    _tiles.forEach((tile) => {
-      tile.textContent = "";
-    });
-  };
-
-  return { changeBtn, updateBoardRender, clearBoard };
+  return { changeBtn, updateBoardRender };
 })();
 
 //Player Factory
