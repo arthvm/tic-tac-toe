@@ -136,7 +136,7 @@ const gameController = (function () {
     if (_checkForRow() || _checkForCollum() || _checkForDiagonal()) {
       console.log("Win"); // REMOVE AFTER TESTING
     } else if (gameBoard.getEmptyTiles().length == 0) {
-      console.log("Tie!");
+      console.log("Tie!"); // REMOVE AFTER TESTING
     }
   };
 

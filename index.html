@@ -6,10 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
     <script src="./game.js" defer></script>
+    <script src="https://kit.fontawesome.com/a5cb30fd77.js" crossorigin="anonymous"></script>
     <title>Tic Tac Toe</title>
 </head>
 
 <body>
+    <dialog class="result-dialog">
+        <h1 class="winner-name"></h1>
+        <h2 class="game-result-txt"></h2>
+        <i class="fa-solid fa-xmark close-result" style="color: #ededed;"></i>
+    </dialog>
+
     <div class="container">
         <div class="player-container">
             <input class="player-input" type="text" placeholder="Player 1" data-marker="X">
