@@ -16,6 +16,15 @@ const gameController = (function () {
     });
   })();
 
+  const addCloseModalBtnListener = () => {
+    const _closeModalBtn = document.querySelector(".close-result");
+
+    _closeModalBtn.addEventListener("click", () => {
+      _closeModalBtn.parentElement.close();
+      _restartGame();
+    });
+  };
+
   const _startGame = function () {
     _addTileListener();
     _getPlayers();
@@ -134,13 +143,15 @@ const gameController = (function () {
     };
 
     if (_checkForRow() || _checkForCollum() || _checkForDiagonal()) {
-      console.log("Win"); // REMOVE AFTER TESTING
+      displayController.showResult(
+        getCurrentPlayer() == _players[0] ? _players[1] : _players[0]
+      ); // REMOVE AFTER TESTING
     } else if (gameBoard.getEmptyTiles().length == 0) {
-      console.log("Tie!"); // REMOVE AFTER TESTING
+      displayController.showResult(); // REMOVE AFTER TESTING
     }
   };
 
-  return { getGameBtn, getCurrentPlayer };
+  return { getGameBtn, getCurrentPlayer, addCloseModalBtnListener };
 })();
 
 // Stores the logic that manages the board
@@ -191,7 +202,25 @@ const displayController = (function () {
     }
   };
 
-  return { changeBtn, updateBoardRender };
+  const showResult = (winner) => {
+    const _resultDialog = document.querySelector(".result-dialog");
+    const _gameResult = document.querySelector(".game-result-txt");
+    const _gameWinner = document.querySelector(".winner-name");
+
+    if (winner == null) {
+      _gameResult.textContent = "It's a";
+      _gameWinner.textContent = "Draw!";
+      _resultDialog.showModal();
+    } else {
+      _gameResult.textContent = "The winner is:";
+      _gameWinner.textContent = winner.name;
+      _resultDialog.showModal();
+    }
+
+    gameController.addCloseModalBtnListener();
+  };
+
+  return { changeBtn, updateBoardRender, showResult };
 })();
 
 //Player Factory

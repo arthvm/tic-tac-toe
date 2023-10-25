@@ -11,13 +11,14 @@
 </head>
 
 <body>
-    <dialog class="result-dialog">
-        <h1 class="winner-name"></h1>
-        <h2 class="game-result-txt"></h2>
-        <i class="fa-solid fa-xmark close-result" style="color: #ededed;"></i>
-    </dialog>
-
     <div class="container">
+        <dialog class="result-dialog">
+            <div class="result-container">
+                <h1 class="winner-name"></h1>
+                <h2 class="game-result-txt"></h2>
+            </div>
+            <i class="fa-solid fa-xmark close-result" style="color: #ededed;"></i>
+        </dialog>
         <div class="player-container">
             <input class="player-input" type="text" placeholder="Player 1" data-marker="X">
             <input class="player-input" type="text" placeholder="Player 2" data-marker="0">
