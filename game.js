@@ -51,13 +51,19 @@ const gameController = (function () {
       tile.addEventListener(
         "click",
         () => {
-          gameBoard.addMarkerToBoard(
-            getCurrentPlayer().marker,
-            +tile.dataset.index
-          );
+          let currentPlayer = getCurrentPlayer();
+          if (currentPlayer.type == "player") {
+            playerMove(currentPlayer, tile);
+            aiMove();
+          } else {
+            aiMove();
+          }
 
           displayController.updateBoardRender();
-          _checkResult();
+          let _winState = checkWinner();
+          if (_winState != null) {
+            displayController.showResult(_winState);
+          }
         },
         { once: true }
       );
@@ -66,17 +72,17 @@ const gameController = (function () {
 
   let _players = new Array();
 
-  const _setPlayer = (playerName, playerMarker) =>
-    _players.push(createPlayer(playerName, playerMarker));
+  const _setPlayer = (playerName, playerMarker, type) =>
+    _players.push(createPlayer(playerName, playerMarker, type));
 
   const _getPlayers = () => {
     const _playerInputs = document.querySelectorAll(".player-input");
 
     _playerInputs.forEach((input) => {
       if (input.value == "") {
-        console.log("AI"); //TODO:  ADD AI
+        _setPlayer("AI", input.dataset.marker, "ai");
       } else {
-        _setPlayer(input.value, input.dataset.marker);
+        _setPlayer(input.value, input.dataset.marker, "player");
       }
     });
   };
@@ -86,7 +92,7 @@ const gameController = (function () {
     return _players[gameBoard.getEmptyTiles().length % 2 != 0 ? 0 : 1];
   };
 
-  const _checkResult = () => {
+  const checkWinner = () => {
     const _checkForRow = () => {
       for (let i = 0; i <= 6; i += 3) {
         let currentRow = [];
@@ -143,11 +149,11 @@ const gameController = (function () {
     };
 
     if (_checkForRow() || _checkForCollum() || _checkForDiagonal()) {
-      displayController.showResult(
-        getCurrentPlayer() == _players[0] ? _players[1] : _players[0]
-      ); // REMOVE AFTER TESTING
+      return getCurrentPlayer() == _players[0] ? _players[1] : _players[0];
     } else if (gameBoard.getEmptyTiles().length == 0) {
-      displayController.showResult(); // REMOVE AFTER TESTING
+      return "tie";
+    } else {
+      return;
     }
   };
 
@@ -207,7 +213,7 @@ const displayController = (function () {
     const _gameResult = document.querySelector(".game-result-txt");
     const _gameWinner = document.querySelector(".winner-name");
 
-    if (winner == null) {
+    if (winner == "tie") {
       _gameResult.textContent = "It's a";
       _gameWinner.textContent = "Draw!";
       _resultDialog.showModal();
@@ -223,7 +229,23 @@ const displayController = (function () {
   return { changeBtn, updateBoardRender, showResult };
 })();
 
+//Logic for the player
+const playerMove = (currentPlayer, tile) => {
+  gameBoard.addMarkerToBoard(currentPlayer.marker, +tile.dataset.index);
+};
+
+const aiMove = () => {
+  let currentPlayer = gameController.getCurrentPlayer();
+  let emptyTiles = gameBoard.getEmptyTiles();
+  if (currentPlayer.type == "ai") {
+    gameBoard.addMarkerToBoard(
+      currentPlayer.marker,
+      emptyTiles[Math.floor(Math.random() * emptyTiles.length)]
+    );
+  }
+};
+
 //Player Factory
-function createPlayer(name, marker) {
-  return { name, marker };
+function createPlayer(name, marker, type) {
+  return { name, marker, type };
 }
