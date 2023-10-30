@@ -93,39 +93,39 @@ const gameController = (function () {
   };
 
   const checkWinner = () => {
-    const _checkForRow = () => {
+    let winner;
+
+    const _checkForRow = (function () {
       for (let i = 0; i <= 6; i += 3) {
         let currentRow = [];
         for (let j = i; j <= i + 2; j++) {
           currentRow[j] = gameBoard.getTile(j);
         }
 
-        if (
-          currentRow.every((tile) => tile == "X") ||
-          currentRow.every((tile) => tile == "0")
-        ) {
-          return true;
+        if (currentRow.every((tile) => tile == "X")) {
+          winner = _players.find((player) => player.marker == "X");
+        } else if (currentRow.every((tile) => tile == "0")) {
+          winner = _players.find((player) => player.marker == "0");
         }
       }
-    };
+    })();
 
-    const _checkForCollum = () => {
+    const _checkForCollum = (function () {
       for (let i = 0; i < 3; i++) {
         let currentCol = [];
         for (let j = i; j <= i + 6; j += 3) {
           currentCol[j] = gameBoard.getTile(j);
         }
 
-        if (
-          currentCol.every((tile) => tile == "X") ||
-          currentCol.every((tile) => tile == "0")
-        ) {
-          return true;
+        if (currentCol.every((tile) => tile == "X")) {
+          winner = _players.find((player) => player.marker == "X");
+        } else if (currentCol.every((tile) => tile == "0")) {
+          winner = _players.find((player) => player.marker == "0");
         }
       }
-    };
+    })();
 
-    const _checkForDiagonal = () => {
+    const _checkForDiagonal = (function () {
       const diagonalRight = [
         gameBoard.getTile(0),
         gameBoard.getTile(4),
@@ -140,20 +140,21 @@ const gameController = (function () {
 
       if (
         diagonalRight.every((tile) => tile == "X") ||
+        diagonalLeft.every((tile) => tile == "X")
+      ) {
+        winner = _players.find((player) => player.marker == "X");
+      } else if (
         diagonalRight.every((tile) => tile == "0") ||
-        diagonalLeft.every((tile) => tile == "X") ||
         diagonalLeft.every((tile) => tile == "0")
       ) {
-        return true;
+        winner = _players.find((player) => player.marker == "0");
       }
-    };
+    })();
 
-    if (_checkForRow() || _checkForCollum() || _checkForDiagonal()) {
-      return getCurrentPlayer() == _players[0] ? _players[1] : _players[0];
-    } else if (gameBoard.getEmptyTiles().length == 0) {
+    if (winner == null && gameBoard.getEmptyTiles().length == 0) {
       return "tie";
     } else {
-      return;
+      return winner;
     }
   };
 
