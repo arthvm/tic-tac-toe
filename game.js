@@ -30,6 +30,10 @@ const gameController = (function () {
     _getPlayers();
     _disablePlayerInput();
     gameController.getGameBtn().dataset.mode = "restart";
+    if (getCurrentPlayer().type == "ai") {
+      aiMove();
+      displayController.updateBoardRender();
+    }
   };
 
   const _restartGame = function () {
@@ -54,8 +58,6 @@ const gameController = (function () {
           let currentPlayer = getCurrentPlayer();
           if (currentPlayer.type == "player") {
             playerMove(currentPlayer, tile);
-            aiMove();
-          } else {
             aiMove();
           }
 
