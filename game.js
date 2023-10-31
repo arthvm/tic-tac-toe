@@ -160,7 +160,12 @@ const gameController = (function () {
     }
   };
 
-  return { getGameBtn, getCurrentPlayer, addCloseModalBtnListener };
+  return {
+    getGameBtn,
+    getCurrentPlayer,
+    addCloseModalBtnListener,
+    checkWinner,
+  };
 })();
 
 // Stores the logic that manages the board
@@ -243,10 +248,77 @@ const aiMove = () => {
   if (currentPlayer.type == "ai") {
     gameBoard.addMarkerToBoard(
       currentPlayer.marker,
-      emptyTiles[Math.floor(Math.random() * emptyTiles.length)]
+      bestMove(currentPlayer.marker)
     );
   }
 };
+
+function bestMove(marker) {
+  let _board = gameBoard.getBoard();
+  let _bestScore = marker == "X" ? -Infinity : Infinity;
+  let _move;
+  for (let i = 0; i < _board.length; i++) {
+    if (_board[i] == null) {
+      _board[i] = marker;
+      let _score = minimax(_board, 0, marker == "X" ? false : true);
+      _board[i] = null;
+      if (marker == "X") {
+        if (_score > _bestScore) {
+          _bestScore = _score;
+          _move = i;
+        }
+      } else {
+        if (_score < _bestScore) {
+          _bestScore = _score;
+          _move = i;
+        }
+      }
+    }
+  }
+
+  return _move;
+}
+
+let scores = {
+  X: 10,
+  0: -10,
+  tie: 0,
+};
+
+function minimax(board, depth, isMaximizing) {
+  let _result = gameController.checkWinner();
+  if (_result == "tie") {
+    return scores[_result];
+  } else if (_result != null) {
+    return scores[_result.marker];
+  }
+
+  if (isMaximizing) {
+    let _bestScore = -Infinity;
+    for (let i = 0; i < board.length; i++) {
+      if (board[i] == null) {
+        board[i] = "X";
+        let _score = minimax(board, depth + 1, false);
+        board[i] = null;
+        _bestScore = Math.max(_score, _bestScore);
+      }
+    }
+
+    return _bestScore;
+  } else {
+    let _bestScore = Infinity;
+    for (let i = 0; i < board.length; i++) {
+      if (board[i] == null) {
+        board[i] = "0";
+        let _score = minimax(board, depth + 1, true);
+        board[i] = null;
+        _bestScore = Math.min(_score, _bestScore);
+      }
+    }
+
+    return _bestScore;
+  }
+}
 
 //Player Factory
 function createPlayer(name, marker, type) {
